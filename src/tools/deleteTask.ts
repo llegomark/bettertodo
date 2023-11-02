@@ -4,7 +4,7 @@ import {deleteTask} from '~/app/actions/deleteTask'
 
 export const deleteTaskTool = new DynamicStructuredTool({
 	name: 'deleteTask',
-	description: 'Delete a task',
+	description: 'Delete a task by id.',
 	func: async ({id}) => {
 		const deletedTask = await deleteTask({id})
 
