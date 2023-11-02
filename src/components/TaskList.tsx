@@ -15,9 +15,9 @@ const TaskList = ({tasks}: Props) => {
 			<div className='flex w-full items-center justify-between'>
 				<h3>Checklist</h3>
 				<button
-					className='bg-primary border-primary w-fit'
+					className='w-fit bg-white hover:bg-blue-500 active:bg-blue-500 dark:bg-black dark:hover:bg-blue-500 dark:active:bg-blue-500'
 					onClick={() => setShowData(prev => !prev)}>
-					<BracesIcon className='h-5 w-5' />
+					<BracesIcon className='h-5 w-5 text-black hover:text-white active:text-white dark:text-white dark:hover:text-white dark:active:text-white' />
 				</button>
 			</div>
 
