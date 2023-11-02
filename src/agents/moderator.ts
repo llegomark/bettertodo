@@ -4,8 +4,8 @@ import {env} from '~/env.mjs'
 import {deleteTaskTool} from '~/tools/deleteTask'
 
 export default async function moderatorAgent({input}) {
-	// const gptModel = 'gpt-3.5-turbo'
-	const gptModel = 'gpt-4' // use GPT-4 for more complex tasks!
+	const gptModel = 'gpt-3.5-turbo'
+	// const gptModel = 'gpt-4' // use GPT-4 for more complex tasks!
 
 	const model = new ChatOpenAI({
 		modelName: gptModel,

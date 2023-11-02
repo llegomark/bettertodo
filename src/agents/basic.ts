@@ -13,8 +13,8 @@ export default async function basicAgent({input}) {
 
 	const writer = stream.writable.getWriter()
 
-	// const gptModel = 'gpt-3.5-turbo'
-	const gptModel = 'gpt-4' // use GPT-4 for more complex tasks!
+	const gptModel = 'gpt-3.5-turbo'
+	// const gptModel = 'gpt-4' // use GPT-4 for more complex tasks!
 
 	const model = new ChatOpenAI({
 		callbacks: [

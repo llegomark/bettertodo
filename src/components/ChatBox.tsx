@@ -129,10 +129,14 @@ export default function ChatBox({refetch}: Props) {
 					type='text'
 				/>
 				<button
-					className='w-fit'
+					className='w-fit bg-white hover:bg-blue-600 active:bg-blue-600 dark:bg-black dark:hover:bg-blue-600 dark:active:bg-blue-600'
 					type='submit'
 					disabled={loading}>
-					{loading ? <Loader /> : <CheckIcon />}
+					{loading ? (
+						<Loader />
+					) : (
+						<CheckIcon className='h-5 w-5 text-black hover:text-white active:text-white dark:text-white dark:hover:text-white dark:active:text-white' />
+					)}
 				</button>
 			</form>
 		</div>
