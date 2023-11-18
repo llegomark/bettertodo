@@ -1,80 +1,79 @@
-import {Task} from '@prisma/client'
-import {BracesIcon} from 'lucide-react'
-import {useState} from 'react'
-import {updateTask} from '~/app/actions/updateTask'
+import { Task } from '@prisma/client';
+import { BracesIcon } from 'lucide-react';
+import { Fragment, useState } from 'react';
+import { updateTask } from '~/app/actions/updateTask';
 
 type Props = {
-	tasks: Task[]
-}
+  tasks: Task[];
+};
 
-const TaskList = ({tasks}: Props) => {
-	const [showData, setShowData] = useState(false)
+const TaskList = ({ tasks }: Props) => {
+  const [codeView, setCodeView] = useState(false);
 
-	return (
-		<div className='border-primary bg-primary flex h-full max-h-80 w-full flex-col gap-5 overflow-y-scroll rounded-md p-3 pl-5 sm:max-h-96'>
-			<div className='flex w-full items-center justify-between'>
-				<h3>Checklist</h3>
-				<button
-					className='w-fit bg-white hover:bg-blue-600 active:bg-blue-600 dark:bg-black dark:hover:bg-blue-600 dark:active:bg-blue-600'
-					onClick={() => setShowData(prev => !prev)}>
-					<BracesIcon className='h-5 w-5 text-black hover:text-white active:text-white dark:text-white dark:hover:text-white dark:active:text-white' />
-				</button>
-			</div>
+  return (
+    <div className="border-primary bg-primary flex h-full max-h-96 w-full flex-col rounded-md px-3 sm:max-h-[50vh]">
+      <div className="flex w-full items-center justify-between pb-6 pt-3">
+        <h3>Checklist</h3>
+        <button className="bg-primary border-primary w-fit" onClick={() => setCodeView((prev) => !prev)}>
+          <BracesIcon className="h-5 w-5" />
+        </button>
+      </div>
 
-			{/* Show structured data as an array */}
-			{showData ? <code className='w-full'>{JSON.stringify(tasks)}</code> : null}
+      {codeView ? (
+        <>
+          <div className="text-secondary mb-2">JSON Preview</div>
+          <code className="mb-3 w-full overflow-auto whitespace-pre">{JSON.stringify(tasks, null, 2)}</code>
+        </>
+      ) : (
+        <>
+          <div className="bg-primary text-secondary sticky top-0 flex w-full items-center border-b-2 border-neutral-200 pb-2 text-center dark:border-neutral-800">
+            <div>Status</div>
+            <div className="grow">Task</div>
+            <div>Created at</div>
+          </div>
+          <div className="grid max-h-full w-full grid-cols-12 items-center gap-3 overflow-y-scroll py-4">
+            {/* Render UI on top of structured data */}
+            {tasks?.length > 0 ? null : <p className="text-secondary col-span-12 text-base">No tasks yet</p>}
+            {tasks.map(({ id, title, status, createdAt }) => (
+              <Fragment key={id}>
+                <input
+                  type="checkbox"
+                  key={`checkbox-${id}-${status}`}
+                  onChange={(e) => {
+                    updateTask({
+                      id,
+                      status: e.target.checked,
+                    });
+                  }}
+                  defaultChecked={status}
+                  className="col-span-1"
+                />
+                <input
+                  onChange={(e) =>
+                    updateTask({
+                      id,
+                      title: e.target.value,
+                    })
+                  }
+                  key={`task-${id}-${title}`}
+                  defaultValue={title}
+                  className="col-span-9"
+                />
+                <div className="text-secondary col-span-2 text-xs">
+                  {new Date(createdAt).toLocaleDateString('en-US', {
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    month: 'short',
+                  })}
+                </div>
+              </Fragment>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 
-			{/* Render UI on top of structured data */}
-			{!showData && tasks.length === 0 ? (
-				<p className='text-base text-stone-400'>No tasks yet</p>
-			) : null}
-
-			{showData ? null : (
-				<>
-					<div className='flex w-full justify-end text-xs'>Created at</div>
-					{tasks.map(({id, title, status, createdAt}) => (
-						<div
-							key={id}
-							className='flex items-center justify-between gap-1'>
-							<input
-								name='status'
-								onChange={e => {
-									updateTask({
-										id,
-										status: e.target.checked
-									})
-								}}
-								className='h-5 w-5'
-								key={`checkbox-${id}-${status}`}
-								defaultChecked={status}
-								type='checkbox'
-							/>
-							<input
-								name='title'
-								onChange={e =>
-									updateTask({
-										id,
-										title: e.target.value
-									})
-								}
-								key={`task-${id}-${title}`}
-								className='w-3/4 border-none'
-								defaultValue={title}
-							/>
-							<div className='text-xs text-stone-400'>
-								{new Date(createdAt).toLocaleDateString('en-US', {
-									day: 'numeric',
-									hour: 'numeric',
-									minute: '2-digit',
-									month: 'short'
-								})}
-							</div>
-						</div>
-					))}
-				</>
-			)}
-		</div>
-	)
-}
-
-export default TaskList
+export default TaskList;
